@@ -1,0 +1,15 @@
+{
+    "name": "lajv-bootstrap",
+    "version": "0.0.0",
+    "description": "",
+    "main": "bs.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node bs.js"
+    },
+    "author": "Jimmy Zöger <zoger@kth.se>",
+    "license": "ISC",
+    "dependencies": {
+        "express": "~3.5.1"
+    }
+}
