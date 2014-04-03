@@ -39,7 +39,7 @@ app.get('/', function(req, res) {
         peers.push(id);
     }
 
-    var randPeers = getRandomPeers(peers.concat(), [], NUM_PEERS, id);
+    var randPeers = getRandomPeers(peers.concat(), [], NUM_PEERS, req.query.id);
 
     res.type('application/json');
     res.json({
