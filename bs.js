@@ -50,6 +50,22 @@ app.get('/', function(req, res) {
     console.log("Sent response");
 });
 
+app.get('/list', function(req, res) {
+    console.log("Get request received");
+    if (req.query.id) {
+        var id = req.query.id;
+        console.log("ID for peer: " + id);
+        peers.push(id);
+    }
+
+    res.type('application/json');
+    res.json({
+        peers: peers,
+        count: peers.length
+    });
+    console.log("Sent response");
+});
+
 app.get('/delete', function(req, res) {
     console.log("Delete request received");
     if (req.query.id) {
