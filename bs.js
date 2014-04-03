@@ -61,6 +61,13 @@ app.get('/delete', function(req, res) {
     console.log("Sent response");
 });
 
+app.get('/clean', function(req, res) {
+    console.log("Clean request received");
+    peers = [];
+    res.send(202);
+    console.log("Sent response");
+});
+
 app.listen(port);
 
 // Put a friendly message on the terminal
