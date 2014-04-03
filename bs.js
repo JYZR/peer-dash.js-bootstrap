@@ -5,6 +5,8 @@ app.use(express.bodyParser());
 
 var port = process.env.PORT || 8000;
 
+// Max number of peers to deliver as bootstrapping peers
+var NUM_PEERS = 5;
 var peers = [];
 
 Array.prototype.remove = function(value) {
@@ -36,10 +38,13 @@ app.get('/', function(req, res) {
         console.log("ID for peer: " + id);
         peers.push(id);
     }
+
+    var randPeers = getRandomPeers(peers.concat(), [], NUM_PEERS, id);
+
     res.type('application/json');
     res.json({
-        peers: peers,
-        count: peers.length
+        peers: randPeers,
+        count: randPeers.length
     });
     // res.send("Hello");
     console.log("Sent response");
@@ -60,3 +65,24 @@ app.listen(port);
 
 // Put a friendly message on the terminal
 console.log("Bootstrap server listening on port " + port);
+
+var getRandomPeers = function(peerList, listToFill, numPeers, excludePeer) {
+    if (listToFill.length == numPeers || peerList.length === 0) {
+        return listToFill;
+    }
+
+    // Get random peer from list
+    var index = Math.floor(Math.random() * peerList.length);
+    var randPeer = peerList[index];
+
+    // Found peer excludePeer.
+    if (randPeer.id == excludePeer) {
+        peerList.splice(index, 1);
+        return getRandomPeers(peerList, listToFill, numPeers, excludePeer);
+    }
+
+    peerList.splice(index, 1);
+    listToFill.push(randPeer);
+
+    return getRandomPeers(peerList, listToFill, numPeers, excludePeer);
+};
