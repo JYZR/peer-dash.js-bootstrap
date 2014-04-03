@@ -99,7 +99,7 @@ var getRandomPeers = function(peerList, listToFill, numPeers, excludePeer) {
     var randPeer = peerList[index];
 
     // Found peer excludePeer.
-    if (randPeer.id == excludePeer) {
+    if (randPeer == excludePeer) {
         peerList.splice(index, 1);
         return getRandomPeers(peerList, listToFill, numPeers, excludePeer);
     }
