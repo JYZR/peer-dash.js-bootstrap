@@ -5,9 +5,9 @@ app.use(express.bodyParser());
 
 var port = process.env.PORT || 8000;
 
-// Max number of peers to deliver as bootstrapping peers
-var NUM_PEERS = 5;
 var peers = [];
+// Max number of peers to deliver as bootstrapping peers
+var MAX_RANDOM_PEERS = 5;
 
 Array.prototype.remove = function(value) {
     var idx = this.indexOf(value);
@@ -33,13 +33,14 @@ app.options('/', function(req, res) {
 
 app.get('/', function(req, res) {
     console.log("Get request received");
+
+    var randPeers = getRandomPeers();
+
     if (req.query.id) {
         var id = req.query.id;
         console.log("ID for peer: " + id);
         peers.push(id);
     }
-
-    var randPeers = getRandomPeers(peers.concat(), [], NUM_PEERS, req.query.id);
 
     res.type('application/json');
     res.json({
@@ -89,23 +90,17 @@ app.listen(port);
 // Put a friendly message on the terminal
 console.log("Bootstrap server listening on port " + port);
 
-var getRandomPeers = function(peerList, listToFill, numPeers, excludePeer) {
-    if (listToFill.length == numPeers || peerList.length === 0) {
-        return listToFill;
+var getRandomPeers = function() {
+    if (peers.length <= MAX_RANDOM_PEERS)
+        return peers;
+
+    var randPeers = [];
+    var maxStep = Math.floor(peers.length / MAX_RANDOM_PEERS);
+
+    var index = -1;
+    for (var i = 0; i < MAX_RANDOM_PEERS; i++) {
+        index += 1 + Math.floor(Math.random() * maxStep);
+        randPeers.push(peers[index]);
     }
-
-    // Get random peer from list
-    var index = Math.floor(Math.random() * peerList.length);
-    var randPeer = peerList[index];
-
-    // Found peer excludePeer.
-    if (randPeer == excludePeer) {
-        peerList.splice(index, 1);
-        return getRandomPeers(peerList, listToFill, numPeers, excludePeer);
-    }
-
-    peerList.splice(index, 1);
-    listToFill.push(randPeer);
-
-    return getRandomPeers(peerList, listToFill, numPeers, excludePeer);
+    return randPeers;
 };
