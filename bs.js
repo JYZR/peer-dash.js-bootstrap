@@ -92,7 +92,7 @@ console.log("Bootstrap server listening on port " + port);
 
 var getRandomPeers = function() {
     if (peers.length <= MAX_RANDOM_PEERS)
-        return peers;
+        return peers.concat();
 
     var randPeers = [];
     var maxStep = Math.floor(peers.length / MAX_RANDOM_PEERS);
