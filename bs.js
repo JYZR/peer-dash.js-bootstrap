@@ -67,6 +67,23 @@ app.get('/list', function(req, res) {
     console.log("Sent response");
 });
 
+app.get('/refill', function(req, res) {
+    console.log("Get request received");
+    var randPeers = getRandomPeers();
+    if (req.query.id) {
+        var id = req.query.id;
+        console.log("ID for peer: " + id);
+        randPeers.remove(id);
+    }
+
+    res.type('application/json');
+    res.json({
+        peers: randPeers,
+        count: randPeers.length
+    });
+    console.log("Sent response");
+});
+
 app.get('/delete', function(req, res) {
     console.log("Delete request received");
     if (req.query.id) {
